@@ -1,4 +1,4 @@
-import React, { memo } from "react";
+import React, { memo, useState } from "react";
 import {
     ZoomableGroup,
     ComposableMap,
@@ -7,13 +7,22 @@ import {
 } from "react-simple-maps";
 
 const MapChart = ({ setTooltipContent }) => {
+    const [clickedCountry, setClickedCountry] = useState("");
+    const [active, setActive] = useState(false)
+
+    const handleClick = (geo) => {
+        setClickedCountry(geo.properties.name);
+        setActive(current => !current)
+    }
     return (
         <div data-tip="">
-            <ComposableMap>
+            <ComposableMap projection="geoMercator">
                 <ZoomableGroup>
                     <Geographies geography="/features.json">
                         {({ geographies }) => 
-                            geographies.map((geo) => (
+                            geographies.map((geo) => {
+                                const isClicked = clickedCountry === geo.properties.name && active;
+                                return (
                                 <Geography
                                     key={geo.rsmKey}
                                     geography={geo}
@@ -23,22 +32,23 @@ const MapChart = ({ setTooltipContent }) => {
                                     onMouseLeave={() => {
                                         setTooltipContent("")
                                     }}
+                                    fill={isClicked ? "#11ad21" : "#D6D6DA"}
+                                    
+                                    onClick = {() => handleClick(geo)}
+                                    
                                     style={{
                                         default: {
-                                            fill: "#D6D6DA",
                                             outline: "none"
                                         },
                                         hover: {
-                                            fill: "#11ad21",
                                             outline: "none"
                                         },
                                         pressed: {
-                                            fill: "#000000",
                                             outline: "none"
                                         }
                                     }}
                                 />
-                            ))
+                            )})
                         }
                     </Geographies>
                 </ZoomableGroup>

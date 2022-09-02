@@ -6,13 +6,30 @@ import {
     Geography
 } from "react-simple-maps";
 
+
+
 const MapChart = ({ setTooltipContent }) => {
     const [clickedCountry, setClickedCountry] = useState("");
     const [active, setActive] = useState(false)
+    const [visited, setVisited] = useState([]);
 
     const handleClick = (geo) => {
-        setClickedCountry(geo.properties.name);
-        setActive(current => !current)
+        if(visited.includes(geo.properties.name)) {
+            const index = visited.indexOf(geo.properties.name)
+            if (index > -1) {
+                setVisited(prevVisited => {
+                    return prevVisited.filter(country => country !== geo.properties.name)
+                })
+            }
+            // visited.pop(geo.properties.name)
+        } else {
+            setVisited(prevVisited => 
+                [...prevVisited, geo.properties.name]
+            )
+            console.log(visited)
+        }
+        
+    
     }
     return (
         <div data-tip="">
@@ -21,7 +38,7 @@ const MapChart = ({ setTooltipContent }) => {
                     <Geographies geography="/features.json">
                         {({ geographies }) => 
                             geographies.map((geo) => {
-                                const isClicked = clickedCountry === geo.properties.name && active;
+                                const isClicked = visited.includes(geo.properties.name);
                                 return (
                                 <Geography
                                     key={geo.rsmKey}
@@ -41,6 +58,7 @@ const MapChart = ({ setTooltipContent }) => {
                                             outline: "none"
                                         },
                                         hover: {
+                                            fill: "grey",
                                             outline: "none"
                                         },
                                         pressed: {

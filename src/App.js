@@ -11,7 +11,7 @@ function App() {
  
   useEffect(() => { 
     async function getVisited() {
-      const docRef = doc(db, "users", "hKDhmzpTZrJyDJaCat2s");
+      const docRef = doc(db, "users", "0u9TaqaQIjiZdOI8wejX");
       const get_visited = await getDoc(docRef);
       //console.log(get_visited.data());
       setVisited(prevVisited => 
@@ -24,7 +24,7 @@ function App() {
   const handleClick = async () => {    
     console.log('Saved: ' + visited);  
     // save to firebase
-    const docRef = doc(db, "users", "hKDhmzpTZrJyDJaCat2s");
+    const docRef = doc(db, "users", "0u9TaqaQIjiZdOI8wejX");
     await setDoc(docRef, {
       'visited': visited
     });
@@ -36,6 +36,7 @@ function App() {
       <button onClick={handleClick}>
         Save
       </button>
+      <p>Visited {visited.length} / 195</p>
       <ReactTooltip>{content}</ReactTooltip>
     </div>
   )

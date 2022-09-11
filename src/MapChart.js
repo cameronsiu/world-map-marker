@@ -1,4 +1,4 @@
-import React, { memo, useState } from "react";
+import React, { memo } from "react";
 import {
     ZoomableGroup,
     ComposableMap,
@@ -53,7 +53,7 @@ const MapChart = ({ setTooltipContent, visited, setVisited}) => {
                                     }
 
                                     stroke="#232323"
-                                    strokeWidth="0.3"
+                                    strokeWidth="0.15"
                                     className="focus:outline-none"
                                     
                                     onClick = {() => handleClick(geo)}

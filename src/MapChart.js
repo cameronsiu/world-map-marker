@@ -9,25 +9,6 @@ import {
 
 
 const MapChart = ({ setTooltipContent }) => {
-<<<<<<< HEAD
-    const [visited, setVisited] = useState([]);
-    
-    
-    const handleClick = (geo) => {
-        //clickedCountries[geo.properties.name] = true;
-        if (visited.includes(geo.properties.name)) {
-            const index = visited.getindexOf(geo.properties.name);
-            if (index > 1) {
-                
-            }
-        }
-        setVisited(prevClicked => {
-            prevClicked.push(geo.properties.name);
-        })
-        
-=======
-    const [clickedCountry, setClickedCountry] = useState("");
-    const [active, setActive] = useState(false)
     const [visited, setVisited] = useState([]);
 
     const handleClick = (geo) => {
@@ -46,8 +27,6 @@ const MapChart = ({ setTooltipContent }) => {
             console.log(visited)
         }
         
-    
->>>>>>> 46d219848fe653f6f2634056fc075d801f7d218b
     }
     return (
         <div data-tip="">
@@ -56,11 +35,7 @@ const MapChart = ({ setTooltipContent }) => {
                     <Geographies geography="/features.json">
                         {({ geographies }) => 
                             geographies.map((geo) => {
-<<<<<<< HEAD
-                                const isClicked = clickedCountries[geo.properties.name];
-=======
                                 const isClicked = visited.includes(geo.properties.name);
->>>>>>> 46d219848fe653f6f2634056fc075d801f7d218b
                                 return (
                                 <Geography
                                     key={geo.rsmKey}

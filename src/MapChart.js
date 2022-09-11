@@ -8,9 +8,7 @@ import {
 
 
 
-const MapChart = ({ setTooltipContent }) => {
-    const [visited, setVisited] = useState([]);
-
+const MapChart = ({ setTooltipContent, visited, setVisited}) => {
     const handleClick = (geo) => {
         if(visited.includes(geo.properties.name)) {
             const index = visited.indexOf(geo.properties.name)

@@ -5,6 +5,11 @@ import { db } from "./firebase";
 import { doc, getDoc, setDoc } from "firebase/firestore"; 
 import { useEffect } from "react";
 
+// TODO: Make save button look good
+// TODO: Add authentication and login / register page
+// TODO: Zooming out more
+// TODO: add menu bar (visited countries at bottom)
+
 function App() {
   const [content, setContent] = useState("");
   const [visited, setVisited] = useState([]); 

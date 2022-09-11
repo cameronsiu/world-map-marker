@@ -9,8 +9,6 @@ import {
 
 
 const MapChart = ({ setTooltipContent }) => {
-    const [clickedCountry, setClickedCountry] = useState("");
-    const [active, setActive] = useState(false)
     const [visited, setVisited] = useState([]);
 
     const handleClick = (geo) => {
@@ -49,7 +47,18 @@ const MapChart = ({ setTooltipContent }) => {
                                     onMouseLeave={() => {
                                         setTooltipContent("")
                                     }}
-                                    fill={isClicked ? "#11ad21" : "#D6D6DA"}
+                                    fill={isClicked ? 
+                                        (geo.properties.continent === 'AS' ? "#8ED2CD" :
+                                        geo.properties.continent === 'AF' ? "#C2ED98" :
+                                        geo.properties.continent === 'NA' ? "#F59B7C"  :
+                                        geo.properties.continent === 'SA' ? "#FED776"  :
+                                        geo.properties.continent === 'EU' ? "#F1F487"  :
+                                        "#98A9D7") : "#D3D3D3"
+                                    }
+
+                                    stroke="#232323"
+                                    strokeWidth="0.3"
+                                    className="focus:outline-none"
                                     
                                     onClick = {() => handleClick(geo)}
                                     

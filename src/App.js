@@ -9,14 +9,15 @@ import { useEffect } from "react";
 // TODO: Add authentication and login / register page
 // TODO: Zooming out more
 // TODO: add menu bar (visited countries at bottom)
+// TODO: Make loading screen nice
 
 function App() {
   const [content, setContent] = useState("");
-  const [visited, setVisited] = useState([]); 
+  const [visited, setVisited] = useState(); 
  
   useEffect(() => { 
     async function getVisited() {
-      const docRef = doc(db, "users", "0u9TaqaQIjiZdOI8wejX");
+      const docRef = doc(db, "users", "hKDhmzpTZrJyDJaCat2s");
       const get_visited = await getDoc(docRef);
       //console.log(get_visited.data());
       setVisited(prevVisited => 
@@ -29,11 +30,16 @@ function App() {
   const handleClick = async () => {    
     console.log('Saved: ' + visited);  
     // save to firebase
-    const docRef = doc(db, "users", "0u9TaqaQIjiZdOI8wejX");
+    const docRef = doc(db, "users", "hKDhmzpTZrJyDJaCat2s");
     await setDoc(docRef, {
       'visited': visited
     });
   };
+
+  // Loading Screen
+  if (visited === undefined) {
+    return <>Still loading...</>;
+  }
 
   return (
     <div>

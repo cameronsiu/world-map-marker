@@ -10,6 +10,7 @@ import { useEffect } from "react";
 // TODO: Zooming out more
 // TODO: add menu bar (visited countries at bottom)
 // TODO: Make loading screen nice
+// TODO: remove scroll bar
 
 function App() {
   const [content, setContent] = useState("");

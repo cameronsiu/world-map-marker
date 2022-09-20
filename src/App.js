@@ -1,9 +1,13 @@
 import React, { useState } from "react"
-import ReactTooltip from "react-tooltip";
-import MapChart from "./MapChart";
-import { db } from "./firebase";
-import { doc, getDoc, setDoc } from "firebase/firestore"; 
-import { useEffect } from "react";
+import MapChart from "./component/MapChart";
+import { auth, db } from "./firebase";
+import { collection, addDoc } from "firebase/firestore";
+import { 
+    createUserWithEmailAndPassword, 
+    signInWithEmailAndPassword,
+    onAuthStateChanged,
+    signOut
+} from "firebase/auth";
 
 // TODO: Make save button look good
 // TODO: Add authentication and login / register page
@@ -13,43 +17,80 @@ import { useEffect } from "react";
 // TODO: remove scroll bar
 
 function App() {
-  const [content, setContent] = useState("");
-  const [visited, setVisited] = useState(); 
- 
-  useEffect(() => { 
-    async function getVisited() {
-      const docRef = doc(db, "users", "hKDhmzpTZrJyDJaCat2s");
-      const get_visited = await getDoc(docRef);
-      //console.log(get_visited.data());
-      setVisited(prevVisited => 
-        [...get_visited.data()['visited']]
-      )
+    const [registerEmail, setRegisterEmail] = useState("");
+    const [registerPassword, setRegisterPassword] = useState("");
+    const [loginEmail, setLoginEmail] = useState("");
+    const [loginPassword, setLoginPassword] = useState("");
+    const [user, setUser] = useState({})
+
+    onAuthStateChanged(auth, (currentUser) => {
+        setUser(currentUser);
+    })
+
+    const register = async () => {
+        try {
+            const res = await createUserWithEmailAndPassword(auth, registerEmail, registerPassword);
+            const user = res.user;
+            await addDoc(collection(db, "users"), {
+            uid: user.uid,
+            authProvider: "local",
+            registerEmail,
+            });
+        } catch (err) {
+            console.error(err);
+            alert(err.message);
+        }
     }
-    getVisited();
-  }, [])
 
-  const handleClick = async () => {    
-    console.log('Saved: ' + visited);  
-    // save to firebase
-    const docRef = doc(db, "users", "hKDhmzpTZrJyDJaCat2s");
-    await setDoc(docRef, {
-      'visited': visited
-    });
-  };
-
-  // Loading Screen
-  if (visited === undefined) {
-    return <>Still loading...</>;
-  }
+    const login = async () => {
+        try {
+            await signInWithEmailAndPassword(auth, loginEmail, loginPassword);
+        } catch (err) {
+            console.error(err);
+            alert(err.message);
+        }
+    }
+    const logout = async () => {
+        await signOut(auth);
+    }
 
   return (
     <div>
-      <MapChart setTooltipContent={setContent} visited={visited} setVisited={setVisited} />
-      <button onClick={handleClick}>
-        Save
-      </button>
-      <p>Visited {visited.length} / 195</p>
-      <ReactTooltip>{content}</ReactTooltip>
+        <div>
+            <h3> Register User</h3>
+            <input 
+            placeholder="Email..."
+            onChange={(event) => {
+                setRegisterEmail(event.target.value);
+            }}
+            />
+            <input 
+            placeholder="Password..." 
+            onChange={(event) => {
+                setRegisterPassword(event.target.value);
+            }}/>
+            <button onClick={register}>Create User</button>
+        </div>
+        <div>
+            <h3>Login</h3>
+            <input 
+            placeholder="Email..."
+            onChange={(event) => {
+                setLoginEmail(event.target.value);
+            }}
+            />
+            <input 
+            placeholder="Password..." 
+            onChange={(event) => {
+                setLoginPassword(event.target.value);
+            }}/>
+            <button onClick={login}> Login </button>
+        </div>
+
+        <h4> User Logged In: </h4>
+        {user?.email}
+
+        <button onClick={logout}> Sign Out </button>
     </div>
   )
 }

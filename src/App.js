@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import MapChart from "./component/MapChart";
 import { auth, db } from "./firebase";
 import { collection, addDoc } from "firebase/firestore";
@@ -22,19 +22,19 @@ function App() {
     const [loginEmail, setLoginEmail] = useState("");
     const [loginPassword, setLoginPassword] = useState("");
     const [user, setUser] = useState({})
-
-    onAuthStateChanged(auth, (currentUser) => {
-        setUser(currentUser);
-    })
+    
+    useEffect(() => {
+        onAuthStateChanged(auth, (currentUser) => setUser(currentUser))
+    }, []) 
 
     const register = async () => {
         try {
             const res = await createUserWithEmailAndPassword(auth, registerEmail, registerPassword);
             const user = res.user;
             await addDoc(collection(db, "users"), {
-            uid: user.uid,
-            authProvider: "local",
-            registerEmail,
+                uid: user.uid,
+                authProvider: "local",
+                registerEmail,
             });
         } catch (err) {
             console.error(err);
